@@ -81,7 +81,9 @@ void ResponseListener::onRequestFailed(const char *requestId , const char *error
 {
     if (mRequestID == requestId)
     {
-        std::cout << "The request has been failed. ID: " << requestId << " : " << error << std::endl;
+		std::cout << "{\"status\":{\"message\":\"The request has been failed. ID:  " << requestId << " : " << error << "\",\"state\":\"failed\"}" << std::endl;
+
+       // std::cout << "" << requestId << " : " << error << std::endl;
         SetEvent(mResponseEvent);
     }
 }

@@ -79,11 +79,12 @@ int main(int argc, char *argv[])
                             std::string sOrderID = responseListener->getOrderID();
                             if (!sOrderID.empty())
                             {
-                                std::cout << "You have successfully created an entry order for instrument "
+                                std::cout << "{\"orderresult\":{\"message\":\"You have successfully created an entry order for instrument \","
                                         << sampleParams->getInstrument() << std::endl;
-                                std::cout << "Your order ID is " << sOrderID << std::endl;
+                                std::cout << "\"orderid\":\"" << sOrderID  << "\"}"<< std::endl;
                                 findOrder(session, sOrderID.c_str(), sampleParams->getAccount(), responseListener);
-                                std::cout << "Done!" << std::endl;
+
+                                std::cout << "{\"processstate\":\"done\"}" << std::endl;
                             }
                         }
                         else

@@ -64,17 +64,18 @@ void SessionStatusListener::onSessionStatusChanged(IO2GSessionStatus::O2GSession
     switch (status)
     {
     case IO2GSessionStatus::Disconnected:
-        std::cout << "status::disconnected" << std::endl;
+        std::cout << "{\"session\":{\"status\":\"disconnected\"}}" << std::endl;
         mConnected = false;
         mDisconnected = true;
         SetEvent(mSessionEvent);
         break;
     case IO2GSessionStatus::Connecting:
-        std::cout << "status::connecting" << std::endl;
+		std::cout << "{\"session\":{\"status\":\"connecting\"}}" << std::endl;
         break;
     case IO2GSessionStatus::TradingSessionRequested:
     {
-        std::cout << "status::trading session requested" << std::endl;
+		std::cout << "{\"session\":{\"status\":\"trading-session-requested\"}}" << std::endl;
+      //  std::cout << "status::trading session requested" << std::endl;
         O2G2Ptr<IO2GSessionDescriptorCollection> descriptors = mSession->getTradingSessionDescriptors();
         bool found = false;
         if (descriptors)
@@ -107,19 +108,20 @@ void SessionStatusListener::onSessionStatusChanged(IO2GSessionStatus::O2GSession
     }
     break;
     case IO2GSessionStatus::Connected:
-        std::cout << "status::connected" << std::endl;
+
+		std::cout << "{\"session\":{\"status\":\"connected\"}}" << std::endl;      
         mConnected = true;
         mDisconnected = false;
         SetEvent(mSessionEvent);
         break;
     case IO2GSessionStatus::Reconnecting:
-        std::cout << "status::reconnecting" << std::endl;
+		std::cout << "{\"session\":{\"status\":\"reconnecting\"}}" << std::endl;
         break;
     case IO2GSessionStatus::Disconnecting:
-        std::cout << "status::disconnecting" << std::endl;
+		std::cout << "{\"session\":{\"status\":\"disconnecting\"}}" << std::endl;
         break;
     case IO2GSessionStatus::SessionLost:
-        std::cout << "status::session lost" << std::endl;
+		std::cout << "{\"session\":{\"status\":\"session-lost\"}}" << std::endl;
         break;
     }
 }

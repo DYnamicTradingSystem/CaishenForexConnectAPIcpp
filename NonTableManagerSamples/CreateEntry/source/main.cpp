@@ -58,7 +58,9 @@ int main(int argc, char *argv[])
 			if (bIsAccountEmpty)
 			{
 				sampleParams->setAccount(account->getAccountID());
-				std::cout << "{\"Account\":{\"Id\":\"" << sampleParams->getAccount() << "\"}}" << std::endl;
+
+				//json
+				std::cout <<  "{\"Account\":{\"Id\":\"" << sampleParams->getAccount() << "\"}}"  << std::endl;
 			}
 			O2G2Ptr<IO2GOfferRow> offer = getOffer(session, sampleParams->getInstrument());
 			if (offer)
@@ -83,23 +85,27 @@ int main(int argc, char *argv[])
 						session->sendRequest(request);
 						if (responseListener->waitEvents())
 						{
-							std::cout << "Done!" << std::endl;
+
+							std::cout << "{\"status\":{\"message\":\done!\",\"state\":\"done\"}" << std::endl;
+
 						}
 						else
 						{
-							std::cout << "Response waiting timeout expired" << std::endl;
+							std::cout << "{\"status\":{\"message\":\"Response waiting timeout expired\",\"state\":\"failed\"}" << std::endl;
 							bWasError = true;
 						}
 					}
 					else
 					{
-						std::cout << "Cannot create request" << std::endl;
+						std::cout << "{\"status\":{\"message\":\"Can not create request\",\"state\":\"failed\"}" << std::endl;
+
 						bWasError = true;
 					}
 				}
 				else
 				{
-					std::cout << "Cannot get login rules" << std::endl;
+					std::cout << "{\"status\":{\"message\":\"Cannot get login rules\",\"state\":\"failed\"}" << std::endl;
+
 					bWasError = true;
 				}
 			}
@@ -111,7 +117,8 @@ int main(int argc, char *argv[])
 		}
 		else
 		{
-			std::cout << "No valid accounts" << std::endl;
+			std::cout << "{\"status\":{\"message\":\"No valid accounts\",\"state\":\"failed\"}" << std::endl;
+
 			bWasError = true;
 		}
 		session->unsubscribeResponse(responseListener);
@@ -140,7 +147,9 @@ IO2GRequest *createEntryOrderRequest(IO2GSession *session, const char *sOfferID,
 	O2G2Ptr<IO2GRequestFactory> requestFactory = session->getRequestFactory();
 	if (!requestFactory)
 	{
-		std::cout << "Cannot create request factory" << std::endl;
+		std::cout << "{\"status\":{\"message\":\"Cannot create request factory\",\"state\":\"failed\"}" << std::endl;
+
+
 		return NULL;
 	}
 	O2G2Ptr<IO2GValueMap> valuemap = requestFactory->createValueMap();
@@ -162,7 +171,9 @@ IO2GRequest *createEntryOrderRequest(IO2GSession *session, const char *sOfferID,
 	O2G2Ptr<IO2GRequest> request = requestFactory->createOrderRequest(valuemap);
 	if (!request)
 	{
-		std::cout << requestFactory->getLastError() << std::endl;
+		std::cout << "{\"status\":{\"message\":\"Error " << requestFactory->getLastError() << "\",\"state\":\"failed\"}" << std::endl;
+
+		//std::cout << requestFactory->getLastError() << std::endl;
 		return NULL;
 	}
 	return request.Detach();
