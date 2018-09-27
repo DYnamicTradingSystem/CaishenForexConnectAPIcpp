@@ -19,6 +19,7 @@ int roundPrice(double x)
 int main(int argc, char *argv[])
 {
 	std::string procName = "CreateEntry";
+	std::cout << "{\"process\":{\"state\":\"starting\"}}" << std::endl;
 	if (argc == 1)
 	{
 		printHelp(procName);
@@ -60,7 +61,7 @@ int main(int argc, char *argv[])
 				sampleParams->setAccount(account->getAccountID());
 
 				//json
-				std::cout <<  "{\"Account\":{\"Id\":\"" << sampleParams->getAccount() << "\"}}"  << std::endl;
+				std::cout << "{\"account\":{\"id\":\"" << sampleParams->getAccount() << "\"}}" << std::endl;
 			}
 			O2G2Ptr<IO2GOfferRow> offer = getOffer(session, sampleParams->getInstrument());
 			if (offer)
@@ -197,6 +198,8 @@ std::string getEntryOrderType(double dBid, double dAsk, double dRate, const char
 	{
 		if (iDifferenceInPips <= iCondDistStop)
 		{
+			std::cout << "{\"status\":{\"message\":\"Price is too close to market. \",\"state\":\"invalid-price-too-close-to-market\"}" << std::endl;
+
 			std::cout << "{\"report\":{\"message\":\"Price is too close to market.\"}" << std::endl;
 			return NULL;
 		}
@@ -206,6 +209,8 @@ std::string getEntryOrderType(double dBid, double dAsk, double dRate, const char
 	{
 		if (-iDifferenceInPips <= iCondDistLimit)
 		{
+			std::cout << "{\"status\":{\"message\":\"Price is too close to market. \",\"state\":\"invalid-price-too-close-to-market\"}" << std::endl;
+
 			std::cout << "{\"report\":{\"message\":\"Price is too close to market.\"}" << std::endl;
 			return NULL;
 		}
@@ -241,11 +246,11 @@ void printSampleParams(std::string &sProcName, LoginParams *loginParams, SampleP
 					//std::cout <<outCommon<< std::endl;
 
 		std::cout << "{\"common\":{"
-		 << "\"login\":\""	<< loginParams->getLogin() << "\","
-		 << "\"url\":\""	<< loginParams->getURL() << "\","
-		 << "\"connection\":\""	<< loginParams->getConnection() << "\","
-		 << "\"sessionid\":\""	<< loginParams->getSessionID() << "\","
-		 << "\"pin\":\""	<< loginParams->getPin() << "\""
+			<< "\"login\":\"" << loginParams->getLogin() << "\","
+			<< "\"url\":\"" << loginParams->getURL() << "\","
+			<< "\"connection\":\"" << loginParams->getConnection() << "\","
+			<< "\"sessionid\":\"" << loginParams->getSessionID() << "\","
+			<< "\"pin\":\"" << loginParams->getPin() << "\""
 			<< "},"
 			<< std::endl;
 	}
@@ -254,13 +259,15 @@ void printSampleParams(std::string &sProcName, LoginParams *loginParams, SampleP
 	// Sample specific information
 	if (sampleParams)
 	{
-		std::cout << "{\"specific\":{"
-		 << "\"Instrument\":\""	  << sampleParams->getInstrument() << "\","
-		 << "\"BuySell\":\""		  << sampleParams->getBuySell() <<  "\","
-		 << "\"Rate\":\""		  << sampleParams->getRate() << "\","
-		 << "\"Lots\":\""			  << sampleParams->getLots() <<  "\","
-		 << "\"Account\":\""		  << sampleParams->getAccount() << "\","
-		 << "\"ExpireDate\":\""			  << sampleParams->getExpDate() <<  "\""
+		std::cout << "{\"requestdata\":{"
+			<< "{\"specific\":{"
+			<< "\"Instrument\":\"" << sampleParams->getInstrument() << "\","
+			<< "\"BuySell\":\"" << sampleParams->getBuySell() << "\","
+			<< "\"Rate\":\"" << sampleParams->getRate() << "\","
+			<< "\"Lots\":\"" << sampleParams->getLots() << "\","
+			<< "\"Account\":\"" << sampleParams->getAccount() << "\","
+			<< "\"ExpireDate\":\"" << sampleParams->getExpDate() << "\""
+			<< "}"
 			<< "}"
 			<< std::endl;
 	}

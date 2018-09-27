@@ -86,11 +86,16 @@ void SessionStatusListener::onSessionStatusChanged(IO2GSessionStatus::O2GSession
             {
                 O2G2Ptr<IO2GSessionDescriptor> descriptor = descriptors->get(i);
                 if (mPrintSubsessions)
-                    std::cout << "  id:='" << descriptor->getID()
-                              << "' name='" << descriptor->getName()
-                              << "' description='" << descriptor->getDescription()
-                              << "' " << (descriptor->requiresPin() ? "requires pin" : "") << std::endl;
-                if (mSessionID == descriptor->getID())
+					std::cout << "{\"session\":{" 
+					<<"\"id\":\"" << descriptor->getID() << "\","
+					<< "\"name\":\"" << descriptor->getName()<< "\","
+					<<"\"description\":\"" << descriptor->getDescription()<< "\","
+					<< "\"pin\":\"" 
+						<< (descriptor->requiresPin() ? "requires-pin" : "") 
+					<< "}}"
+					<< std::endl;
+
+                     if (mSessionID == descriptor->getID())
                 {
                     found = true;
                     break;
@@ -99,7 +104,7 @@ void SessionStatusListener::onSessionStatusChanged(IO2GSessionStatus::O2GSession
         }
         if (!found)
         {
-            onLoginFailed("The specified sub session identifier is not found");
+            onLoginFailed("{\"status\":{\"message\":\"The specified sub session identifier is not found\",\"state\":\"failed-specified-id-subsession-not-found\"}}");
         }
         else
         {

@@ -108,13 +108,17 @@ void ResponseListener::onTablesUpdates(IO2GResponse *data)
                     {
                         O2G2Ptr<IO2GOrderRow> order = reader->getOrderRow(i);
                         if (mRequestID == order->getRequestID() && reader->getUpdateType(i) == Insert)
-                        {
-                            std::cout << "The order has been added. OrderID='" << order->getOrderID() << "', "
-                                    << "Type='" << order->getType() << "', "
-                                    << "BuySell='" << order->getBuySell() << "', "
-                                    << "Rate='" << order->getRate() << "', "
-                                    << "TimeInForce='" << order->getTimeInForce() << "'"
-                                    << std::endl;
+                        {                           
+							std::cout
+
+									<< "{\"process\":\"response\",\"data\":{"
+									<< "\"OrderID\":\"" << order->getOrderID() << "\","
+									<< "\"Type\":\"" << order->getType() << "\","
+									<< "\"BuySell\":\"" << order->getBuySell() << "\","
+									<< "\"Rate\":\"" << order->getRate() << "\","
+									<< "\"TimeInForce\":\"" << order->getTimeInForce() << "\"}}"
+								<< "}"
+									<< std::endl;
                             mOrderID = order->getOrderID();
                             SetEvent(mResponseEvent);
                             break;
